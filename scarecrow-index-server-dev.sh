@@ -11,6 +11,7 @@ curl -s http://resources.prod.factual.com/services/hadoop/cdh5/scripts/get_confi
 
 #Setup Kerberos credentials for Hadoop
 curl -s https://keyserver.prod.factual.com/scarecrow/scarecrow-services.scarecrow-services.keytab.sec  | openssl des3 -d -k "$KEYTAB_PASSPHRASE" > /etc/krb5.keytab
+kinit -l 24h -kt /etc/krb5.keytab scarecrow-services@FACTUAL.COM
 
 #Setup github credentials
 curl -s  https://keyserver.prod.factual.com/scarecrow/scarecrow-services.deploy.sec | openssl des3 -d -k "$GITHUB_KEY_PASSPHRASE" > ~/.ssh/id_rsa

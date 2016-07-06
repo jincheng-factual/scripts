@@ -54,4 +54,4 @@ hadoop fs -copyToLocal $HDFS_FILE $INPUT_FILE
 export YARN_HEAPSIZE=2048
 yarn jar ./target/scarecrow-lucene-services-app.jar com.factual.lucene.scarecrow.impl.IndexWriter $INDEX_TYPE $INPUT_FILE $INDEX_NAME $SCOPE $NTHREADS $CASE_SENSITIVE $LOCALE
 
-shutdown 0
+exit 1

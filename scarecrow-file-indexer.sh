@@ -24,7 +24,7 @@ cd /scarecrow-lucene-services
 git checkout $SC_SERVICES_BRANCH
 
 #Build
-mvn clean package -Dmaven.test.skip=true
+mvn clean package -B -Dmaven.test.skip=true
 
 #Setup
 mkdir -p /var/local/lucene_indexes/
@@ -47,8 +47,7 @@ export LC_MEASUREMENT="en_US.UTF-8"
 export LC_IDENTIFICATION="en_US.UTF-8"
 
 #Copy HDFS input file
-mktemp
-LOCAL_FILE=/tmp/data.json
+LOCAL_FILE=$(mktemp)
 hadoop fs -copyToLocal $INPUT_FILE $LOCAL_FILE
 
 #Run

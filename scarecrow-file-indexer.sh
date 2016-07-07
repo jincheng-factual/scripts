@@ -47,6 +47,7 @@ export LC_MEASUREMENT="en_US.UTF-8"
 export LC_IDENTIFICATION="en_US.UTF-8"
 
 #Copy HDFS input file
+mktemp
 LOCAL_FILE=/tmp/data.json
 hadoop fs -copyToLocal $INPUT_FILE $LOCAL_FILE
 

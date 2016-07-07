@@ -50,8 +50,14 @@ export LC_IDENTIFICATION="en_US.UTF-8"
 INPUT_FILE=/tmp/data.json
 hadoop fs -copyToLocal $HDFS_FILE $INPUT_FILE
 
+#Copy HDFS input file
+LOCAL_FILE=/tmp/data.json
+hadoop fs -copyToLocal $INPUT_FILE $LOCAL_FILE
+
 #Run
 export YARN_HEAPSIZE=2048
-yarn jar ./target/scarecrow-lucene-services-app.jar com.factual.lucene.scarecrow.impl.IndexWriter $INDEX_TYPE $INPUT_FILE $INDEX_NAME $SCOPE $NTHREADS $CASE_SENSITIVE $LOCALE
-
-exit 1
+if [ $INDEX_TYPE = "KEY_VALUE" ]; then
+    yarn jar ./target/scarecrow-lucene-services-app.jar com.factual.lucene.scarecrow.impl.FileIndexer index_type=$INDEX_TYPE input_file=$LOCAL_FILE index_name=$INDEX_NAME scope=$SCOPE num_threads=$NTHREADS case_sensitive=$CASE_SENSITIVE locale=$LOCALE
+else
+    yarn jar ./target/scarecrow-lucene-services-app.jar com.factual.lucene.scarecrow.impl.FileIndexer index_type=$INDEX_TYPE input_file=$LOCAL_FILE index_name=$INDEX_NAME scope=$SCOPE num_threads=$NTHREADS
+fi

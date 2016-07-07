@@ -56,8 +56,11 @@ hadoop fs -copyToLocal $INPUT_FILE $LOCAL_FILE
 
 #Run
 export YARN_HEAPSIZE=2048
+
+JAR=./target/scarecrow-lucene-services-app.jar
+MAIN_CLASS=com.factual.lucene.scarecrow.io.indexing.FileIndexer
 if [ $INDEX_TYPE = "KEY_VALUE" ]; then
-    yarn jar ./target/scarecrow-lucene-services-app.jar com.factual.lucene.scarecrow.impl.FileIndexer index_type=$INDEX_TYPE input_file=$LOCAL_FILE index_name=$INDEX_NAME scope=$SCOPE num_threads=$NTHREADS case_sensitive=$CASE_SENSITIVE locale=$LOCALE
+    yarn jar $JAR $MAIN_CLASS index_type=$INDEX_TYPE input_file=$LOCAL_FILE index_name=$INDEX_NAME scope=$SCOPE num_threads=$NTHREADS case_sensitive=$CASE_SENSITIVE locale=$LOCALE
 else
-    yarn jar ./target/scarecrow-lucene-services-app.jar com.factual.lucene.scarecrow.impl.FileIndexer index_type=$INDEX_TYPE input_file=$LOCAL_FILE index_name=$INDEX_NAME scope=$SCOPE num_threads=$NTHREADS
+    yarn jar $JAR $MAIN_CLASS index_type=$INDEX_TYPE input_file=$LOCAL_FILE index_name=$INDEX_NAME scope=$SCOPE num_threads=$NTHREADS
 fi

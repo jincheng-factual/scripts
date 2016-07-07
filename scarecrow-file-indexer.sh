@@ -24,7 +24,7 @@ cd /scarecrow-lucene-services
 git checkout $SC_SERVICES_BRANCH
 
 #Build
-mvn clean package -B -Dmaven.test.skip=true
+mvn clean package -Dmaven.test.skip=true
 
 #Setup
 mkdir -p /var/local/lucene_indexes/
@@ -47,7 +47,8 @@ export LC_MEASUREMENT="en_US.UTF-8"
 export LC_IDENTIFICATION="en_US.UTF-8"
 
 #Copy HDFS input file
-LOCAL_FILE=$(mktemp)
+mktemp
+LOCAL_FILE=/tmp/data.json
 hadoop fs -copyToLocal $INPUT_FILE $LOCAL_FILE
 
 #Run
@@ -55,8 +56,8 @@ export YARN_HEAPSIZE=2048
 
 JAR=./target/scarecrow-lucene-services-app.jar
 MAIN_CLASS=com.factual.lucene.scarecrow.io.indexing.FileIndexer
-if [ $INDEX_TYPE = "KEY_VALUE" ]; then
-    yarn jar $JAR $MAIN_CLASS index_type=$INDEX_TYPE input_file=$LOCAL_FILE index_name=$INDEX_NAME scope=$SCOPE num_threads=$NTHREADS case_sensitive=$CASE_SENSITIVE locale=$LOCALE
-else
+if [[ -z $CASE_SENSITIVE ]] || [[ -z $LOCALE ]]; then
     yarn jar $JAR $MAIN_CLASS index_type=$INDEX_TYPE input_file=$LOCAL_FILE index_name=$INDEX_NAME scope=$SCOPE num_threads=$NTHREADS
+else
+    yarn jar $JAR $MAIN_CLASS index_type=$INDEX_TYPE input_file=$LOCAL_FILE index_name=$INDEX_NAME scope=$SCOPE num_threads=$NTHREADS case_sensitive=$CASE_SENSITIVE locale=$LOCALE
 fi
